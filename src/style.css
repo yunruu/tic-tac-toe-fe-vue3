@@ -73,10 +73,10 @@ button:focus-visible {
 }
 
 #app {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  min-width: 100vw;
+  min-height: 100vh;
+  background: linear-gradient(20deg, rgb(22, 16, 50), #080818);
 }
 
 @media (prefers-color-scheme: light) {
