@@ -2,6 +2,7 @@
 import { computed, ref, onMounted, onBeforeMount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { openDialog } from '../utils/ui'
+import { joinGame } from '../api/game'
 
 const route = useRoute()
 const router = useRouter()
@@ -25,11 +26,19 @@ onMounted(async () => {
       router.push({ name: 'home' })
     }
     playerInfo.value = JSON.parse(decodeURIComponent(route.query.player))
+    console.log(playerInfo.value.id)
     if (!playerInfo) {
-      throw new Error()
+      throw new Error('Player information not found, please try to join a game again.')
     }
-  } catch {
-    await openDialog('Player information not found, please try to join a game again', 'Error', 'error')
+    // there is player info in the query, so we can join a game
+    const res = await joinGame(playerInfo.value.id)
+    if (!res) {
+      throw new Error('There has been an error trying to join a game, please try again later!')
+    }
+    gameSession.value = res.gameSession
+    console.log(gameSession.value)
+  } catch (e) {
+    await openDialog(e, 'Error', 'error')
     router.push({ name: 'home' })
   }
 })
