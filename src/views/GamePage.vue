@@ -3,6 +3,7 @@ import { computed, ref, onMounted, onBeforeMount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { openDialog } from '../utils/ui'
 import { joinGame } from '../api/game'
+import Gameboard from '../components/Gameboard.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -62,5 +63,6 @@ const playerNames = computed(() => {
       <span class="text-white mr-4">Player 1: {{ playerNames.playerOne }}</span>
       <span class="text-white mr-4">Player 2: {{ playerNames.playerTwo }}</span>
     </section>
+    <Gameboard :board="gameSession.board" :playerInfo="playerInfo" />
   </main>
 </template>
