@@ -35,6 +35,8 @@ onMounted(async () => {
     if (!route.query.player) {
       router.push({ name: 'home' })
     }
+    // reset all variables from previous game session
+    init()
     playerInfo.value = JSON.parse(decodeURIComponent(route.query.player))
     if (!playerInfo) {
       throw new Error('Player information not found, please try to join a game again.')
@@ -71,7 +73,6 @@ const playerNames = computed(() => {
 
 const updateBoard = async () => {
   try {
-    console.log('updating board')
     const res = await boardInfo(gameSession.value.id)
     if (res) {
       gameSession.value = res.gameSession
@@ -86,8 +87,12 @@ const updateBoard = async () => {
         }
         clearIntervals()
       } else {
-        updateMsg.value =
-          gameSession.value.turn === playerPosition.value ? 'It is your turn!' : 'Waiting for opponent ...'
+        if (gameSession.value.players[1]) {
+          updateMsg.value =
+            gameSession.value.turn === playerPosition.value ? 'It is your turn!' : 'Waiting for opponent ...'
+        } else {
+          updateMsg.value = 'Waiting for opponent ...'
+        }
       }
     }
   } catch {}
@@ -117,6 +122,24 @@ const clearIntervals = () => {
   if (intervalId.value) {
     clearInterval(intervalId.value)
   }
+}
+
+const init = () => {
+  clearIntervals()
+  gameSession.value = {
+    id: '',
+    players: [null, null],
+    turn: 0,
+    board: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    winner: null,
+  }
+  playerPosition.value = 0
+  playerInfo.value = {
+    id: '',
+    username: '',
+  }
+  updateMsg.value = 'Loading game ...'
+  intervalId.value = null
 }
 </script>
 
