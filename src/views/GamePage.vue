@@ -143,6 +143,10 @@ const init = () => {
   updateMsg.value = 'Loading game ...'
   intervalId.value = null
 }
+
+const reload = () => {
+  router.go()
+}
 </script>
 
 <template>
@@ -161,6 +165,14 @@ const init = () => {
       </span>
       <div class="update-banner" role="region" id="gameUpdateInfo" aria-live="polite">
         {{ updateMsg }}
+        <button
+          v-if="gameSession.winner"
+          class="ml-4 play-again-btn"
+          @click="reload"
+          aria-label="Click to play another round"
+        >
+          Play Again!
+        </button>
       </div>
     </section>
     <Gameboard
@@ -193,6 +205,17 @@ const init = () => {
 .btn {
   width: 180px;
   font-weight: bold;
+}
+
+.play-again-btn {
+  background-color: #f7c7f9;
+  color: #543d7b;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 450px) {
