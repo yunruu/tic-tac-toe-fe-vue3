@@ -79,15 +79,7 @@ const updateBoard = async () => {
     if (res) {
       gameSession.value = res.gameSession
       if (gameSession.value.winner) {
-        clearIntervals()
-        const winner = gameSession.value.winner
-        if (winner == playerInfo.value.id) {
-          updateMsg.value = 'You won! Congratulations!'
-        } else if (winner == 'DRAW') {
-          updateMsg.value = 'It is a draw! Play again?'
-        } else {
-          updateMsg.value = 'You lost! Better luck next time!'
-        }
+        gameOver()
       } else {
         if (gameSession.value.players[1]) {
           updateMsg.value =
@@ -105,6 +97,10 @@ const onMakeMove = async (idx) => {
     const res = await makeMove(gameSession.value.id, playerInfo.value.id, idx, playerPosition.value)
     if (!res) return
     gameSession.value = res.gameSession
+    if (gameSession.value.winner) {
+      gameOver()
+      return
+    }
     updateMsg.value = gameSession.value.board.includes(0) ? 'Waiting for opponent ...' : 'Calculating results ...'
   } catch {
     openDialog('There has been an error trying to make a move, please try again later!', 'Warning')
@@ -117,6 +113,18 @@ const handleLeaveGame = async () => {
     router.push({ name: 'home' })
   } catch {
     openDialog('There has been an error trying to leave the game, please try again later!', 'Warning')
+  }
+}
+
+const gameOver = () => {
+  clearIntervals()
+  const winner = gameSession.value.winner
+  if (winner == playerInfo.value.id) {
+    updateMsg.value = 'You won! Congratulations!'
+  } else if (winner == 'DRAW') {
+    updateMsg.value = 'It is a draw! Play again?'
+  } else {
+    updateMsg.value = 'You lost! Better luck next time!'
   }
 }
 
