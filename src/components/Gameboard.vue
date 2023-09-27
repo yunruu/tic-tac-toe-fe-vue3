@@ -1,13 +1,13 @@
 <template>
   <div id="game-board" class="mt-3">
     <div id="row-one" class="cell-row">
-      <Cell v-for="grid in rowOne" :symbol="symbol(board[grid])" :id="grid" :handleClick="handleClick" />
+      <Cell v-for="grid in rowOne" :symbol="grid.symbol" :id="grid.idx" :handleClick="handleClick" />
     </div>
     <div id="row-two" class="cell-row">
-      <Cell v-for="grid in rowTwo" :symbol="symbol(board[grid])" :id="grid" :handleClick="handleClick" />
+      <Cell v-for="grid in rowTwo" :symbol="grid.symbol" :id="grid.idx" :handleClick="handleClick" />
     </div>
     <div id="row-three" class="cell-row">
-      <Cell v-for="grid in rowThree" :symbol="symbol(board[grid])" :id="grid" :handleClick="handleClick" />
+      <Cell v-for="grid in rowThree" :symbol="grid.symbol" :id="grid.idx" :handleClick="handleClick" />
     </div>
   </div>
 </template>
@@ -32,23 +32,49 @@ const props = defineProps({
 })
 
 const rowOne = computed(() => {
-  return props.board.slice(0, 3)
+  const board = props.board.slice(0, 3)
+  for (let i = 0; i < 3; i++) {
+    board[i] = {
+      idx: i,
+      value: board[i],
+      symbol: symbol(board[i]),
+    }
+  }
+  return board
 })
 
 const rowTwo = computed(() => {
-  return props.board.slice(3, 6)
+  const board = props.board.slice(3, 6)
+  for (let i = 0; i < 3; i++) {
+    board[i] = {
+      idx: i + 3,
+      value: board[i],
+      symbol: symbol(board[i]),
+    }
+  }
+  return board
 })
 
 const rowThree = computed(() => {
-  return props.board.slice(6, 9)
+  const board = props.board.slice(6, 9)
+  for (let i = 0; i < 3; i++) {
+    board[i] = {
+      idx: i + 6,
+      value: board[i],
+      symbol: symbol(board[i]),
+    }
+  }
+  return board
 })
 
-const handleClick = () => {
-  console.log('clicked')
+const emit = defineEmits(['makeMove'])
+
+const handleClick = (idx) => {
+  emit('makeMove', idx)
 }
 
 const symbol = (value) => {
-  return value === 0 ? '' : playerPosition === value ? 'O' : 'X'
+  return value === 0 ? '' : props.playerPosition === value ? 'O' : 'X'
 }
 </script>
 
