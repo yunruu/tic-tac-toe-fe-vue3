@@ -1,23 +1,29 @@
 <template>
-  <button class="cell" :value="id" @click="handleClick" :aria-label="srContent">
+  <button class="cell" :value="id" @click="handleClick(id)" :aria-label="srContent">
     {{ symbol }}
   </button>
 </template>
 
 <script setup>
+import { computed } from 'vue'
+
 const props = defineProps({
   symbol: {
     type: String,
     required: true,
   },
   id: {
-    type: String,
+    type: Number,
     required: true,
   },
   handleClick: {
     type: Function,
     required: true,
   },
+})
+
+const srContent = computed(() => {
+  return `Cell ${props.id} is ${props.symbol}`
 })
 </script>
 
