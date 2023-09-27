@@ -21,6 +21,8 @@ const playerInfo = ref({
   username: '',
 })
 
+const playerPosition = ref(0)
+
 onMounted(async () => {
   try {
     if (!route.query.player) {
@@ -38,6 +40,7 @@ onMounted(async () => {
     }
     gameSession.value = res.gameSession
     console.log(gameSession.value)
+    playerPosition.value = res.gameSession.players.findIndex((player) => player.id === playerInfo.value.id) + 1
   } catch (e) {
     await openDialog(e, 'Error', 'error')
     router.push({ name: 'home' })
@@ -63,6 +66,6 @@ const playerNames = computed(() => {
       <span class="text-white mr-4">Player 1: {{ playerNames.playerOne }}</span>
       <span class="text-white mr-4">Player 2: {{ playerNames.playerTwo }}</span>
     </section>
-    <Gameboard :board="gameSession.board" :playerInfo="playerInfo" />
+    <Gameboard :board="gameSession.board" :playerInfo="playerInfo" :playerPosition="playerPosition" />
   </main>
 </template>
