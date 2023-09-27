@@ -1,8 +1,8 @@
 <script setup>
-import { computed, ref, onMounted, onBeforeMount } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { openDialog } from '../utils/ui'
-import { joinGame, leaveGame, makeMove } from '../api/game'
+import { boardInfo, joinGame, leaveGame, makeMove } from '../api/game'
 import Gameboard from '../components/Gameboard.vue'
 import Tag from '../components/Tag.vue'
 
@@ -25,6 +25,7 @@ const playerInfo = ref({
 })
 
 const updateMsg = ref('Loading game ...')
+const intervalId = ref(null)
 
 onMounted(async () => {
   try {
@@ -42,16 +43,20 @@ onMounted(async () => {
     }
     gameSession.value = res.gameSession
     playerPosition.value = gameSession.value?.players[0]?.pid === playerInfo.value.id ? 1 : 2
+    updateMsg.value = gameSession.value.turn === playerPosition.value ? 'It is your turn!' : 'Waiting for opponent ...'
 
-    if (gameSession.value.winner) {
-      updateMsg.value = gameSession.value.winner === playerInfo.value.id ? 'You won!' : 'You lost!'
-    } else {
-      updateMsg.value =
-        gameSession.value.turn === playerPosition.value ? 'It is your turn!' : 'Waiting for opponent ...'
-    }
+    intervalId.value = setInterval(async () => {
+      await updateBoard()
+    }, 5000)
   } catch (e) {
     await openDialog(e, 'Error', 'error')
     router.push({ name: 'home' })
+  }
+})
+
+onUnmounted(() => {
+  if (intervalId.value) {
+    clearInterval(intervalId.value)
   }
 })
 
@@ -63,11 +68,35 @@ const playerNames = computed(() => {
   }
 })
 
+const updateBoard = async () => {
+  try {
+    console.log('updating board')
+    const res = await boardInfo(gameSession.value.id)
+    if (res) {
+      gameSession.value = res.gameSession
+      if (gameSession.value.winner) {
+        const winner = gameSession.value.winner
+        if (winner == playerInfo.value.id) {
+          updateMsg.value = 'You won! Congratulations!'
+        } else if (winner == 'DRAW') {
+          updateMsg.value = 'It is a draw! Play again?'
+        } else {
+          updateMsg.value = 'You lost! Better luck next time!'
+        }
+      } else {
+        updateMsg.value =
+          gameSession.value.turn === playerPosition.value ? 'It is your turn!' : 'Waiting for opponent ...'
+      }
+    }
+  } catch {}
+}
+
 const onMakeMove = async (idx) => {
   try {
     const res = await makeMove(gameSession.value.id, playerInfo.value.id, idx, playerPosition.value)
     if (!res) return
     gameSession.value = res.gameSession
+    updateMsg.value = gameSession.value.board.includes(0) ? 'Waiting for opponent ...' : 'It is a draw! Play again?'
   } catch {
     openDialog('There has been an error trying to make a move, please try again later!', 'Warning', 'error')
   }
