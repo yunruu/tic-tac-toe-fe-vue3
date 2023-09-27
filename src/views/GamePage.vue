@@ -40,14 +40,10 @@ onMounted(async () => {
     // reset all variables from previous game session
     init()
     playerInfo.value = JSON.parse(decodeURIComponent(route.query.player))
-    if (!playerInfo) {
-      throw new Error('Player information not found, please try to join a game again.')
-    }
+    if (!playerInfo) return
     // there is player info in the query, so we can join a game
     const res = await joinGame(playerInfo.value.id)
-    if (!res) {
-      throw new Error('There has been an error trying to join a game, please try again later!')
-    }
+    if (!res) return
     gameSession.value = res.gameSession
     playerPosition.value = gameSession.value?.players[0]?.pid === playerInfo.value.id ? 1 : 2
     updateMsg.value = 'Waiting for opponent ...'
