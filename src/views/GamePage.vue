@@ -2,7 +2,7 @@
 import { computed, ref, onMounted, onBeforeMount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { openDialog } from '../utils/ui'
-import { joinGame } from '../api/game'
+import { joinGame, makeMove } from '../api/game'
 import Gameboard from '../components/Gameboard.vue'
 
 const route = useRoute()
@@ -16,12 +16,12 @@ const gameSession = ref({
   winner: null,
 })
 
+const playerPosition = ref(0)
+
 const playerInfo = ref({
   id: '',
   username: '',
 })
-
-const playerPosition = ref(0)
 
 onMounted(async () => {
   try {
@@ -29,7 +29,6 @@ onMounted(async () => {
       router.push({ name: 'home' })
     }
     playerInfo.value = JSON.parse(decodeURIComponent(route.query.player))
-    console.log(playerInfo.value.id)
     if (!playerInfo) {
       throw new Error('Player information not found, please try to join a game again.')
     }
@@ -39,8 +38,8 @@ onMounted(async () => {
       throw new Error('There has been an error trying to join a game, please try again later!')
     }
     gameSession.value = res.gameSession
-    console.log(gameSession.value)
-    playerPosition.value = res.gameSession.players.findIndex((player) => player.id === playerInfo.value.id) + 1
+    playerPosition.value = gameSession.value?.players[0]?.pid === playerInfo.value.id ? 1 : 2
+    console.log('value', playerPosition.value)
   } catch (e) {
     await openDialog(e, 'Error', 'error')
     router.push({ name: 'home' })
@@ -54,6 +53,17 @@ const playerNames = computed(() => {
     playerTwo: playerTwo?.username || '-',
   }
 })
+
+const onMakeMove = async (idx) => {
+  console.log('making move at cell', idx)
+  try {
+    const res = await makeMove(gameSession.value.id, playerInfo.value.id, idx, playerPosition.value)
+    if (!res) return
+    gameSession.value = res.gameSession
+  } catch {
+    openDialog('There has been an error trying to make a move, please try again later!', 'Warning', 'error')
+  }
+}
 </script>
 
 <template>
@@ -66,6 +76,11 @@ const playerNames = computed(() => {
       <span class="text-white mr-4">Player 1: {{ playerNames.playerOne }}</span>
       <span class="text-white mr-4">Player 2: {{ playerNames.playerTwo }}</span>
     </section>
-    <Gameboard :board="gameSession.board" :playerInfo="playerInfo" :playerPosition="playerPosition" />
+    <Gameboard
+      :board="gameSession.board"
+      :playerInfo="playerInfo"
+      :playerPosition="playerPosition"
+      @make-move="onMakeMove"
+    />
   </main>
 </template>
