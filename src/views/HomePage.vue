@@ -32,7 +32,7 @@ const handleClick = async () => {
   <header>
     <h1 class="title-txt text-7xl font-bold mt-10 mb-10 text-white text-center">Tic-Tac-Toe</h1>
   </header>
-  <div class="start-container w-1/2 rounded m-auto p-10 text-center text-grey-slate-800 bg-white">
+  <div class="start-container w-2/5 rounded m-auto p-10 text-center text-grey-slate-800 bg-white">
     <section class="font-semibold text-xl mb-8">
       <h2 class="text-2xl mb-6">Hello and welcome!</h2>
       This is a classic tic-tac-toe game with a twist. It's designed to be inclusive and accessible to screen reader
@@ -66,6 +66,11 @@ const handleClick = async () => {
 </template>
 
 <style scoped>
+@media screen and (max-width: 1300px) {
+  .start-container {
+    width: 60vw;
+  }
+}
 @media screen and (max-width: 900px) {
   .start-container {
     width: 75vw;
