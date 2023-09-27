@@ -1,11 +1,12 @@
 <template>
-  <button class="cell" :value="id" @click="handleClick(id)" :aria-label="srContent">
+  <button class="cell" :value="id" @click="handleClick(id)" :disabled="isDisabled" :aria-label="srContent">
     {{ symbol }}
   </button>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { convertCellIdxToLabel } from '../utils/service'
 
 const props = defineProps({
   symbol: {
@@ -20,10 +21,18 @@ const props = defineProps({
     type: Function,
     required: true,
   },
+  isPlayerTurn: {
+    type: Boolean,
+    required: true,
+  },
+})
+
+const isDisabled = computed(() => {
+  return !props.isPlayerTurn || props.symbol !== ''
 })
 
 const srContent = computed(() => {
-  return `Cell ${props.id} is ${props.symbol}`
+  return `${convertCellIdxToLabel(props.id)} cell is an ${props.symbol}`
 })
 </script>
 
