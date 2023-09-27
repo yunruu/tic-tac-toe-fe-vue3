@@ -172,7 +172,7 @@ const reload = () => {
         <strong class="ml-2">{{ playerNames.playerTwo }}</strong>
       </span>
       <div class="update-banner" role="region" id="gameUpdateInfo" aria-live="polite">
-        {{ updateMsg }}
+        <span>{{ updateMsg }}</span>
         <button
           v-if="gameSession.winner"
           class="ml-4 play-again-btn"
@@ -190,7 +190,7 @@ const reload = () => {
       :isPlayerTurn="isPlayerTurn"
       @make-move="onMakeMove"
     />
-    <div class="flex justify-center mt-8" aria-label="Actions for the game">
+    <div class="flex justify-center align-middle mt-8" aria-label="Actions for the game">
       <button class="btn" aria-label="Leave the game" @click="handleLeaveGame">Leave</button>
     </div>
   </main>
@@ -219,7 +219,8 @@ const reload = () => {
   background-color: #f7c7f9;
   color: #543d7b;
   border: none;
-  padding: 5px 10px;
+  padding: 4px 10px;
+  margin-top: 7px;
   border-radius: 5px;
   font-size: 16px;
   font-weight: bold;
