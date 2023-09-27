@@ -134,7 +134,7 @@ const clearIntervals = () => {
         <Tag type="info" tag="PLAYER TWO" />
         <strong class="ml-2">{{ playerNames.playerTwo }}</strong>
       </span>
-      <div class="update-banner">
+      <div class="update-banner" role="region" id="gameUpdateInfo" aria-live="polite">
         {{ updateMsg }}
       </div>
     </section>
