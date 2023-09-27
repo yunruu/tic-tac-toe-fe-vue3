@@ -32,7 +32,9 @@ const isDisabled = computed(() => {
 })
 
 const srContent = computed(() => {
-  return `${convertCellIdxToLabel(props.id)} cell is an ${props.symbol}`
+  return `${convertCellIdxToLabel(props.id)} cell is ${
+    props.symbol === '' ? 'currently empty' : `occupied by ${props.symbol === 'X' ? 'opponent' : 'you'}`
+  }`
 })
 </script>
 
