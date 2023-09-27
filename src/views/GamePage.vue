@@ -27,7 +27,9 @@ const updateMsg = ref('Loading game ...')
 const intervalId = ref(null)
 
 const isPlayerTurn = computed(() => {
-  return gameSession.value.players[1] != null && gameSession.value.turn == playerPosition.value
+  return (
+    gameSession.value.players[1] != null && gameSession.value.turn == playerPosition.value && !gameSession.value.winner
+  )
 })
 
 onMounted(async () => {
@@ -77,6 +79,7 @@ const updateBoard = async () => {
     if (res) {
       gameSession.value = res.gameSession
       if (gameSession.value.winner) {
+        clearIntervals()
         const winner = gameSession.value.winner
         if (winner == playerInfo.value.id) {
           updateMsg.value = 'You won! Congratulations!'
@@ -85,7 +88,6 @@ const updateBoard = async () => {
         } else {
           updateMsg.value = 'You lost! Better luck next time!'
         }
-        clearIntervals()
       } else {
         if (gameSession.value.players[1]) {
           updateMsg.value =
