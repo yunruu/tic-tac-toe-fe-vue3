@@ -1,9 +1,8 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-export const openDialog = (msg, title, type = 'warning', showCancelButton = false) => {
+export const openDialog = (msg, title, showCancelButton = false) => {
   return ElMessageBox.alert(msg, title, {
     confirmButtonText: 'OK',
-    type,
     showCancelButton,
   })
     .then(() => {
@@ -14,9 +13,8 @@ export const openDialog = (msg, title, type = 'warning', showCancelButton = fals
     })
 }
 
-export const openMessage = (msg, type = 'warning') => {
+export const openMessage = (msg) => {
   ElMessage({
     message: msg,
-    type,
   })
 }

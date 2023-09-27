@@ -52,7 +52,7 @@ onMounted(async () => {
       await updateBoard()
     }, 5000)
   } catch (e) {
-    await openDialog(e, 'Error', 'error')
+    await openDialog(e, 'Error')
     router.push({ name: 'home' })
   }
 })
@@ -100,7 +100,7 @@ const onMakeMove = async (idx) => {
     gameSession.value = res.gameSession
     updateMsg.value = gameSession.value.board.includes(0) ? 'Waiting for opponent ...' : 'Calculating results ...'
   } catch {
-    openDialog('There has been an error trying to make a move, please try again later!', 'Warning', 'error')
+    openDialog('There has been an error trying to make a move, please try again later!', 'Warning')
   }
 }
 
@@ -109,7 +109,7 @@ const handleLeaveGame = async () => {
     await leaveGame(gameSession.value.id, playerInfo.value.id)
     router.push({ name: 'home' })
   } catch {
-    openDialog('There has been an error trying to leave the game, please try again later!', 'Warning', 'error')
+    openDialog('There has been an error trying to leave the game, please try again later!', 'Warning')
   }
 }
 

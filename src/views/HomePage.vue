@@ -12,7 +12,7 @@ const handleClick = async () => {
     const _name = name.value || 'Anonymous'
     const res = await createPlayer(_name)
     if (!res) {
-      openDialog('There has been an error trying to join game, please try again later!', 'Warning', 'error')
+      openDialog('There has been an error trying to join game, please try again later!', 'Warning')
       return
     }
     const encodedPlayerInfo = encodeURIComponent(JSON.stringify(res.player))

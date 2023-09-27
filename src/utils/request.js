@@ -27,7 +27,7 @@ function init() {
 
 async function catchError(error) {
   let message = error.response?.data?.message || error.response?.statusText || error.message
-  openDialog(message, 'Warning', 'warning', false)
+  openDialog(message, 'Warning', false)
 }
 
 export default service
