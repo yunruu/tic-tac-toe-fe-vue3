@@ -18,7 +18,6 @@ const gameSession = ref({
 })
 
 const playerPosition = ref(0)
-
 const playerInfo = ref({
   id: '',
   username: '',
@@ -26,6 +25,10 @@ const playerInfo = ref({
 
 const updateMsg = ref('Loading game ...')
 const intervalId = ref(null)
+
+const isPlayerTurn = computed(() => {
+  return gameSession.value.turn == playerPosition.value
+})
 
 onMounted(async () => {
   try {
@@ -55,9 +58,7 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-  if (intervalId.value) {
-    clearInterval(intervalId.value)
-  }
+  clearIntervals()
 })
 
 const playerNames = computed(() => {
@@ -83,6 +84,7 @@ const updateBoard = async () => {
         } else {
           updateMsg.value = 'You lost! Better luck next time!'
         }
+        clearIntervals()
       } else {
         updateMsg.value =
           gameSession.value.turn === playerPosition.value ? 'It is your turn!' : 'Waiting for opponent ...'
@@ -110,6 +112,12 @@ const handleLeaveGame = async () => {
     openDialog('There has been an error trying to leave the game, please try again later!', 'Warning', 'error')
   }
 }
+
+const clearIntervals = () => {
+  if (intervalId.value) {
+    clearInterval(intervalId.value)
+  }
+}
 </script>
 
 <template>
@@ -134,6 +142,7 @@ const handleLeaveGame = async () => {
       :board="gameSession.board"
       :playerInfo="playerInfo"
       :playerPosition="playerPosition"
+      :isPlayerTurn="isPlayerTurn"
       @make-move="onMakeMove"
     />
     <div class="flex justify-center mt-8" aria-label="Actions for the game">
