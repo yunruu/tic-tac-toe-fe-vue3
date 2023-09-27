@@ -2,7 +2,7 @@
 import { computed, ref, onMounted, onBeforeMount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { openDialog } from '../utils/ui'
-import { joinGame, makeMove } from '../api/game'
+import { joinGame, leaveGame, makeMove } from '../api/game'
 import Gameboard from '../components/Gameboard.vue'
 import Tag from '../components/Tag.vue'
 
@@ -69,6 +69,15 @@ const onMakeMove = async (idx) => {
     openDialog('There has been an error trying to make a move, please try again later!', 'Warning', 'error')
   }
 }
+
+const handleLeaveGame = async () => {
+  try {
+    await leaveGame(gameSession.value.id, playerInfo.value.id)
+    router.push({ name: 'home' })
+  } catch {
+    openDialog('There has been an error trying to leave the game, please try again later!', 'Warning', 'error')
+  }
+}
 </script>
 
 <template>
@@ -96,7 +105,7 @@ const onMakeMove = async (idx) => {
       @make-move="onMakeMove"
     />
     <div class="flex justify-center mt-8" aria-label="Actions for the game">
-      <button class="buttons" aria-label="Leave the game">Leave</button>
+      <button class="btn" aria-label="Leave the game" @click="handleLeaveGame">Leave</button>
     </div>
   </main>
 </template>
@@ -115,7 +124,7 @@ const onMakeMove = async (idx) => {
   color: #f7c7f9;
 }
 
-.buttons {
+.btn {
   width: 180px;
   font-weight: bold;
 }
