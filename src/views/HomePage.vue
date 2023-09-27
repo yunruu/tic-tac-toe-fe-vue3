@@ -48,7 +48,6 @@ const handleClick = async () => {
         <input
           type="text"
           class="px-4 py-2 mr-5 rounded-xl text-lg text-black font-bold bg-slate-200"
-          placeholder="Anonymous"
           v-model="name"
           aria-label="Enter your name, or leave it blank to join anonymously"
           @keyup.enter="handleClick"
@@ -56,7 +55,7 @@ const handleClick = async () => {
         <button
           class="bg-purple-500 hover:bg-purple-700 active:bg-purple-800 text-white text-lg font-bold py-2 px-5 rounded-xl"
           @click="handleClick"
-          aria-label="Join a new game"
+          aria-label="Click to join a new game"
         >
           Start Game
         </button>
