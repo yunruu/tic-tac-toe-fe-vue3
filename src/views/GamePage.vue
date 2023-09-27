@@ -27,7 +27,7 @@ const updateMsg = ref('Loading game ...')
 const intervalId = ref(null)
 
 const isPlayerTurn = computed(() => {
-  return gameSession.value.turn == playerPosition.value
+  return gameSession.value.players[1] != null && gameSession.value.turn == playerPosition.value
 })
 
 onMounted(async () => {
@@ -46,7 +46,7 @@ onMounted(async () => {
     }
     gameSession.value = res.gameSession
     playerPosition.value = gameSession.value?.players[0]?.pid === playerInfo.value.id ? 1 : 2
-    updateMsg.value = gameSession.value.turn === playerPosition.value ? 'It is your turn!' : 'Waiting for opponent ...'
+    updateMsg.value = 'Waiting for opponent ...'
 
     intervalId.value = setInterval(async () => {
       await updateBoard()
