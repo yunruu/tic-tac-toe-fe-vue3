@@ -1,5 +1,5 @@
 <template>
-  <div id="game-board" class="mt-3">
+  <div id="game-board" class="gameboard mt-3">
     <div id="row-one" class="cell-row">
       <Cell v-for="grid in rowOne" :symbol="grid.symbol" :id="grid.idx" :handleClick="handleClick" />
     </div>
@@ -83,5 +83,11 @@ const symbol = (value) => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media screen and (max-width: 450px) {
+  .gameboard {
+    padding: 8px;
+  }
 }
 </style>

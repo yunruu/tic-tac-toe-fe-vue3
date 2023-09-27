@@ -32,7 +32,7 @@ const srContent = computed(() => {
   width: 130px;
   height: 130px;
   cursor: pointer;
-  background-color: #dde0e3;
+  background-color: #ffffff;
   color: #543d7b;
   font-weight: bold;
   font-size: 36px;
@@ -40,17 +40,18 @@ const srContent = computed(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12);
 }
 
 .cell:hover,
 .cell:focus {
-  background-color: #968eaf;
-  color: #dde0e3;
+  background-color: #bdbdf1;
+  color: white;
 }
 
 .cell:active {
-  background-color: #543d7b;
-  color: #dde0e3;
+  background-color: #f2bef4;
+  color: white;
 }
 
 .sr-only {

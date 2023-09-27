@@ -9,7 +9,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #b0b0f5;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -76,7 +76,8 @@ button:focus-visible {
   margin: 0 auto;
   min-width: 100vw;
   min-height: 100vh;
-  background: linear-gradient(20deg, rgb(22, 16, 50), #080818);
+  background: linear-gradient(20deg, #3c2a56, #07071a);
+  overflow-x: hidden;
 }
 
 @media (prefers-color-scheme: light) {
