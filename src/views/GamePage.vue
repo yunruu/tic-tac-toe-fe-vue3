@@ -95,6 +95,9 @@ const onMakeMove = async (idx) => {
       :playerPosition="playerPosition"
       @make-move="onMakeMove"
     />
+    <div class="flex justify-center mt-8" aria-label="Actions for the game">
+      <button class="buttons" aria-label="Leave the game">Leave</button>
+    </div>
   </main>
 </template>
 
