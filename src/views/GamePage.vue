@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { openDialog } from '../utils/ui'
 import { joinGame, makeMove } from '../api/game'
 import Gameboard from '../components/Gameboard.vue'
+import Tag from '../components/Tag.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -23,6 +24,8 @@ const playerInfo = ref({
   username: '',
 })
 
+const updateMsg = ref('Loading game ...')
+
 onMounted(async () => {
   try {
     if (!route.query.player) {
@@ -39,6 +42,9 @@ onMounted(async () => {
     }
     gameSession.value = res.gameSession
     playerPosition.value = gameSession.value?.players[0]?.pid === playerInfo.value.id ? 1 : 2
+
+    updateMsg.value = gameSession.value.turn === playerPosition.value ? 'It is your turn!' : 'Waiting for opponent ...'
+
     console.log('value', playerPosition.value)
   } catch (e) {
     await openDialog(e, 'Error', 'error')
@@ -55,7 +61,6 @@ const playerNames = computed(() => {
 })
 
 const onMakeMove = async (idx) => {
-  console.log('making move at cell', idx)
   try {
     const res = await makeMove(gameSession.value.id, playerInfo.value.id, idx, playerPosition.value)
     if (!res) return
@@ -68,13 +73,21 @@ const onMakeMove = async (idx) => {
 
 <template>
   <header>
-    <h1 class="text-7xl font-bold mt-10 mb-8 text-white text-center">Tic-Tac-Toe</h1>
+    <h1 class="text-5xl font-bold mb-4 text-white text-center">Tic-Tac-Toe</h1>
   </header>
   <main>
     <section class="text-center text-xl" aria-label="Game session information">
-      <p class="text-gray-400 font-semibold mb-3">Session ID: {{ gameSession.id || '-' }}</p>
-      <span class="text-white mr-4">Player 1: {{ playerNames.playerOne }}</span>
-      <span class="text-white mr-4">Player 2: {{ playerNames.playerTwo }}</span>
+      <span class="text-slate-200 mr-3">
+        <Tag type="info" tag="PLAYER ONE" />
+        <strong class="ml-2">{{ playerNames.playerOne }}</strong>
+      </span>
+      <span class="text-slate-200 mr-3 ml-4">
+        <Tag type="info" tag="PLAYER TWO" />
+        <strong class="ml-2">{{ playerNames.playerTwo }}</strong>
+      </span>
+      <div class="update-banner">
+        {{ updateMsg }}
+      </div>
     </section>
     <Gameboard
       :board="gameSession.board"
@@ -84,3 +97,29 @@ const onMakeMove = async (idx) => {
     />
   </main>
 </template>
+
+<style scoped>
+.update-banner {
+  background-color: transparent;
+  margin: auto;
+  margin-bottom: 14px;
+  margin-top: 14px;
+  padding: 16px 5px;
+  text-transform: uppercase;
+  font-size: 24px;
+  font-weight: bold;
+  width: fit-content;
+  color: #f7c7f9;
+}
+
+.buttons {
+  width: 180px;
+  font-weight: bold;
+}
+
+@media screen and (max-width: 450px) {
+  .update-banner {
+    width: 90vw;
+  }
+}
+</style>
