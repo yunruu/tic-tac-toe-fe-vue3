@@ -43,9 +43,12 @@ onMounted(async () => {
     gameSession.value = res.gameSession
     playerPosition.value = gameSession.value?.players[0]?.pid === playerInfo.value.id ? 1 : 2
 
-    updateMsg.value = gameSession.value.turn === playerPosition.value ? 'It is your turn!' : 'Waiting for opponent ...'
-
-    console.log('value', playerPosition.value)
+    if (gameSession.value.winner) {
+      updateMsg.value = gameSession.value.winner === playerInfo.value.id ? 'You won!' : 'You lost!'
+    } else {
+      updateMsg.value =
+        gameSession.value.turn === playerPosition.value ? 'It is your turn!' : 'Waiting for opponent ...'
+    }
   } catch (e) {
     await openDialog(e, 'Error', 'error')
     router.push({ name: 'home' })
