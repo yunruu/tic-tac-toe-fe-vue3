@@ -1,13 +1,31 @@
 <template>
   <div id="game-board" class="gameboard mt-3">
     <div id="row-one" class="cell-row">
-      <Cell v-for="grid in rowOne" :symbol="grid.symbol" :id="grid.idx" :handleClick="handleClick" />
+      <Cell
+        v-for="grid in rowOne"
+        :symbol="grid.symbol"
+        :id="grid.idx"
+        :handleClick="handleClick"
+        :isPlayerTurn="isPlayerTurn"
+      />
     </div>
     <div id="row-two" class="cell-row">
-      <Cell v-for="grid in rowTwo" :symbol="grid.symbol" :id="grid.idx" :handleClick="handleClick" />
+      <Cell
+        v-for="grid in rowTwo"
+        :symbol="grid.symbol"
+        :id="grid.idx"
+        :handleClick="handleClick"
+        :isPlayerTurn="isPlayerTurn"
+      />
     </div>
     <div id="row-three" class="cell-row">
-      <Cell v-for="grid in rowThree" :symbol="grid.symbol" :id="grid.idx" :handleClick="handleClick" />
+      <Cell
+        v-for="grid in rowThree"
+        :symbol="grid.symbol"
+        :id="grid.idx"
+        :handleClick="handleClick"
+        :isPlayerTurn="isPlayerTurn"
+      />
     </div>
   </div>
 </template>
@@ -27,6 +45,10 @@ const props = defineProps({
   },
   playerPosition: {
     type: Number,
+    required: true,
+  },
+  isPlayerTurn: {
+    type: Boolean,
     required: true,
   },
 })

@@ -98,7 +98,7 @@ const onMakeMove = async (idx) => {
     const res = await makeMove(gameSession.value.id, playerInfo.value.id, idx, playerPosition.value)
     if (!res) return
     gameSession.value = res.gameSession
-    updateMsg.value = gameSession.value.board.includes(0) ? 'Waiting for opponent ...' : 'It is a draw! Play again?'
+    updateMsg.value = gameSession.value.board.includes(0) ? 'Waiting for opponent ...' : 'Calculating results ...'
   } catch {
     openDialog('There has been an error trying to make a move, please try again later!', 'Warning', 'error')
   }
