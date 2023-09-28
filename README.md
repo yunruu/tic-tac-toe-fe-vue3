@@ -1,7 +1,7 @@
 # Tic-Tac-to-the-Toe
 This is a a classic game of Tic-Tac-Toe with a unique twist – it's designed to be inclusive and accessible to screen reader users!
 
-# Steps to Start
+# Steps to Run the Game
 
 **Alternative One: npm**
 1. Clone this repository.
